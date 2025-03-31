@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>DynamoDB Update</title>
+    <script>
+        async function updateDynamoDB() {
+            const id = document.getElementById("id").value;
+            const value = document.getElementById("value").value;
+            const apiUrl = "https://nybxboyxkh.execute-api.eu-north-1.amazonaws.com/updateItem";
+
+            if (!id || !value) {
+                alert("Please enter both ID and Value.");
+                return;
+            }
+
+            // Construct URL with query parameters
+            const fullUrl = `${apiUrl}?id=${encodeURIComponent(id)}&value=${encodeURIComponent(value)}`;
+
+            try {
+                const response = await fetch(fullUrl, {
+                    method: "POST" // API is expecting query parameters, so we use GET
+                });
+                
+                const result = await response.json();
+                alert(result.message || "Error occurred");
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Failed to update DynamoDB.");
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Update DynamoDB</h2>
+        <label for="id">ID:</label>
+        <input type="text" id="id" required><br><br>
+        
+        <label for="value">Value:</label>
+        <input type="text" id="value" required><br><br>
+        
+        <button onclick="updateDynamoDB()">Submit</button>
+    </div>
+</body>
+</html>
